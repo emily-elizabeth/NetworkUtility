@@ -156,7 +156,7 @@ Begin DesktopContainer UIPing
       LockTop         =   True
       MaximumCharactersAllowed=   0
       Multiline       =   True
-      ReadOnly        =   False
+      ReadOnly        =   True
       Scope           =   2
       TabIndex        =   3
       TabPanelIndex   =   0
@@ -173,6 +173,17 @@ Begin DesktopContainer UIPing
       Visible         =   True
       Width           =   460
    End
+   Begin Shell PingShell
+      Arguments       =   ""
+      Backend         =   ""
+      Canonical       =   False
+      ExecuteMode     =   0
+      Index           =   -2147483648
+      LockedInPosition=   False
+      Scope           =   2
+      TabPanelIndex   =   0
+      TimeOut         =   0
+   End
 End
 #tag EndDesktopWindow
 
@@ -183,10 +194,16 @@ End
 	#tag Event
 		Sub Pressed()
 		  if (not self.ServerAddress.Text.IsEmpty) then
-		    DIM sh As NEW Shell
-		    sh.Execute "ping " + self.ServerAddress.Text + " -c " + self.Counter.SelectedRowValue
-		    self.LogFile.Text = sh.Result
+		    self.PingShell.ExecuteMode = Shell.ExecuteModes.Asynchronous
+		    self.PingShell.Execute "ping " + self.ServerAddress.Text + " -c " + self.Counter.SelectedRowValue
 		  end if
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PingShell
+	#tag Event
+		Sub DataAvailable()
+		  self.LogFile.AddText me.ReadAll
 		End Sub
 	#tag EndEvent
 #tag EndEvents

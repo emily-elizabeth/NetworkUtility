@@ -127,7 +127,7 @@ Begin DesktopContainer UIWhois
       LockTop         =   True
       MaximumCharactersAllowed=   0
       Multiline       =   True
-      ReadOnly        =   False
+      ReadOnly        =   True
       Scope           =   2
       TabIndex        =   2
       TabPanelIndex   =   0
