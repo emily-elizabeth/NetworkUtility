@@ -318,6 +318,10 @@ End
 	#tag Event
 		Sub Completed()
 		  self.UIEnable
+		  
+		  if (me.ExitCode <> 0) then
+		    self.LogFile.Text = "There was an error." + EndOfLine + me.ExitCode.ToString
+		  end if
 		End Sub
 	#tag EndEvent
 #tag EndEvents

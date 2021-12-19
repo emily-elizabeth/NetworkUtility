@@ -66,7 +66,7 @@ Begin DesktopContainer UIWhois
       Visible         =   True
       Width           =   368
    End
-   Begin DesktopButton Button1
+   Begin DesktopButton Lookup
       AllowAutoDeactivate=   True
       Bold            =   False
       Cancel          =   False
@@ -144,20 +144,65 @@ Begin DesktopContainer UIWhois
       Visible         =   True
       Width           =   460
    End
+   Begin Shell WhoisShell
+      Arguments       =   ""
+      Backend         =   ""
+      Canonical       =   False
+      ExecuteMode     =   1
+      Index           =   -2147483648
+      LockedInPosition=   False
+      Scope           =   2
+      TabPanelIndex   =   0
+      TimeOut         =   0
+   End
 End
 #tag EndDesktopWindow
 
 #tag WindowCode
+	#tag Method, Flags = &h21
+		Private Sub UIDisable()
+		  self.DomainName.Enabled = FALSE
+		  self.LogFile.Enabled = FALSE
+		  self.Lookup.Enabled = FALSE
+		  self.LogFile.Text = ""
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub UIEnable()
+		  self.DomainName.Enabled = TRUE
+		  self.LogFile.Enabled = TRUE
+		  self.Lookup.Enabled = TRUE
+		End Sub
+	#tag EndMethod
+
+
 #tag EndWindowCode
 
-#tag Events Button1
+#tag Events Lookup
 	#tag Event
 		Sub Pressed()
 		  if (not self.DomainName.Text.IsEmpty) then
-		    DIM sh As NEW Shell
-		    sh.Execute "whois " + self.DomainName.Text
-		    self.LogFile.Text = sh.Result
+		    self.UIDisable
+		    self.WhoisShell.ExecuteMode = Shell.ExecuteModes.Asynchronous
+		    self.WhoisShell.Execute "whois " + self.DomainName.Text
 		  end if
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events WhoisShell
+	#tag Event
+		Sub Completed()
+		  self.UIEnable
+		  
+		  if (me.ExitCode <> 0) then
+		    self.LogFile.Text = "There was an error." + EndOfLine + me.ExitCode.ToString
+		  end if
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub DataAvailable()
+		  self.LogFile.AddText me.ReadAll
 		End Sub
 	#tag EndEvent
 #tag EndEvents
