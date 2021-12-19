@@ -178,8 +178,12 @@ Begin DesktopContainer UIPing
       Backend         =   ""
       Canonical       =   False
       ExecuteMode     =   0
+      ExitCode        =   0
       Index           =   -2147483648
+      IsRunning       =   False
       LockedInPosition=   False
+      PID             =   0
+      Result          =   ""
       Scope           =   2
       TabPanelIndex   =   0
       TimeOut         =   0
@@ -188,12 +192,31 @@ End
 #tag EndDesktopWindow
 
 #tag WindowCode
+	#tag Method, Flags = &h21
+		Private Sub UIDisable()
+		  self.Button1.Enabled = FALSE
+		  self.Counter.Enabled = FALSE
+		  self.ServerAddress.Enabled = FALSE
+		  self.LogFile.Text = ""
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub UIEnable()
+		  self.Button1.Enabled = TRUE
+		  self.Counter.Enabled = TRUE
+		  self.ServerAddress.Enabled = TRUE
+		End Sub
+	#tag EndMethod
+
+
 #tag EndWindowCode
 
 #tag Events Button1
 	#tag Event
 		Sub Pressed()
 		  if (not self.ServerAddress.Text.IsEmpty) then
+		    self.UIDisable
 		    self.PingShell.ExecuteMode = Shell.ExecuteModes.Asynchronous
 		    self.PingShell.Execute "ping " + self.ServerAddress.Text + " -c " + self.Counter.SelectedRowValue
 		  end if
@@ -204,6 +227,11 @@ End
 	#tag Event
 		Sub DataAvailable()
 		  self.LogFile.AddText me.ReadAll
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Completed()
+		  self.UIEnable
 		End Sub
 	#tag EndEvent
 #tag EndEvents
