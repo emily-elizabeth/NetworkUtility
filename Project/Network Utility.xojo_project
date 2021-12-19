@@ -11,6 +11,7 @@ MenuBar=MainMenuBar;Demo App/MainMenuBar.xojo_menu;&h0000000028CC77FF;&h00000000
 DesktopWindow=UIPortScan;Interface/UIPortScan.xojo_window;&h000000000BFDDFFF;&h000000002B4117FF;false
 DesktopWindow=UIWhois;Interface/UIWhois.xojo_window;&h0000000025124FFF;&h000000002B4117FF;false
 DesktopWindow=UIPing;Interface/UIPing.xojo_window;&h000000002DC26FFF;&h000000002B4117FF;false
+DesktopWindow=UINSLookup;Interface/UINSLookup.xojo_window;&h0000000032CC3FFF;&h000000002B4117FF;false
 DefaultWindow=Window1
 AppMenuBar=MainMenuBar
 MajorVersion=1
