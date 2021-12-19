@@ -86,6 +86,64 @@ Begin DesktopContainer UIPortScan
       Visible         =   True
       Width           =   80
    End
+   Begin DesktopTextArea LogFile
+      AllowAutoDeactivate=   True
+      AllowFocusRing  =   True
+      AllowSpellChecking=   True
+      AllowStyledText =   True
+      AllowTabs       =   False
+      BackgroundColor =   &cFFFFFF
+      Bold            =   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Format          =   ""
+      HasBorder       =   True
+      HasHorizontalScrollbar=   False
+      HasVerticalScrollbar=   True
+      Height          =   196
+      HideSelection   =   True
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   20
+      LineHeight      =   0.0
+      LineSpacing     =   1.0
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   True
+      LockTop         =   True
+      MaximumCharactersAllowed=   0
+      Multiline       =   True
+      ReadOnly        =   True
+      Scope           =   2
+      TabIndex        =   4
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   ""
+      TextAlignment   =   0
+      TextColor       =   &c000000
+      Tooltip         =   ""
+      Top             =   84
+      Transparent     =   False
+      Underline       =   False
+      UnicodeMode     =   1
+      ValidationMask  =   ""
+      Visible         =   True
+      Width           =   460
+   End
+   Begin Shell PortScanShell
+      Arguments       =   ""
+      Backend         =   ""
+      Canonical       =   False
+      ExecuteMode     =   1
+      Index           =   -2147483648
+      LockedInPosition=   False
+      Scope           =   2
+      TabPanelIndex   =   0
+      TimeOut         =   0
+   End
    Begin DesktopTextField EndPort
       AllowAutoDeactivate=   True
       AllowFocusRing  =   True
@@ -168,53 +226,6 @@ Begin DesktopContainer UIPortScan
       Visible         =   True
       Width           =   80
    End
-   Begin DesktopTextArea LogFile
-      AllowAutoDeactivate=   True
-      AllowFocusRing  =   True
-      AllowSpellChecking=   True
-      AllowStyledText =   True
-      AllowTabs       =   False
-      BackgroundColor =   &cFFFFFF
-      Bold            =   False
-      Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
-      FontUnit        =   0
-      Format          =   ""
-      HasBorder       =   True
-      HasHorizontalScrollbar=   False
-      HasVerticalScrollbar=   True
-      Height          =   196
-      HideSelection   =   True
-      Index           =   -2147483648
-      Italic          =   False
-      Left            =   20
-      LineHeight      =   0.0
-      LineSpacing     =   1.0
-      LockBottom      =   True
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   True
-      LockTop         =   True
-      MaximumCharactersAllowed=   0
-      Multiline       =   True
-      ReadOnly        =   True
-      Scope           =   2
-      TabIndex        =   4
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Text            =   ""
-      TextAlignment   =   0
-      TextColor       =   &c000000
-      Tooltip         =   ""
-      Top             =   84
-      Transparent     =   False
-      Underline       =   False
-      UnicodeMode     =   1
-      ValidationMask  =   ""
-      Visible         =   True
-      Width           =   460
-   End
    Begin DesktopTextField ServerAddress
       AllowAutoDeactivate=   True
       AllowFocusRing  =   True
@@ -260,17 +271,53 @@ End
 #tag EndDesktopWindow
 
 #tag WindowCode
+	#tag Method, Flags = &h21
+		Private Sub UIDisable()
+		  self.EndPort.Enabled = FALSE
+		  self.LogFile.Enabled = FALSE
+		  self.Scan.Enabled = FALSE
+		  self.ServerAddress.Enabled = FALSE
+		  self.StartPort.Enabled = FALSE
+		  self.Verbose.Enabled = FALSE
+		  self.LogFile.Text = ""
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub UIEnable()
+		  self.EndPort.Enabled = TRUE
+		  self.LogFile.Enabled = TRUE
+		  self.Scan.Enabled = TRUE
+		  self.ServerAddress.Enabled = TRUE
+		  self.StartPort.Enabled = TRUE
+		  self.Verbose.Enabled = TRUE
+		End Sub
+	#tag EndMethod
+
+
 #tag EndWindowCode
 
 #tag Events Scan
 	#tag Event
 		Sub Pressed()
 		  if (NOT self.ServerAddress.Text.IsEmpty) AND (NOT self.StartPort.Text.IsEmpty) then
-		    DIM sh As NEW Shell
-		    sh.Execute "nc", "-z" + if(self.Verbose.Value, "v ", " ") + _
+		    self.UIDisable
+		    self.PortScanShell.ExecuteMode = Shell.ExecuteModes.Asynchronous
+		    self.PortScanShell.Execute "nc", "-z" + if(self.Verbose.Value, "v ", " ") + _
 		    self.ServerAddress.Text + " " + self.StartPort.Text + if(self.EndPort.Text.IsEmpty, "", "-" + self.EndPort.Text)
-		    self.LogFile.Text = sh.Result
 		  end if
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PortScanShell
+	#tag Event
+		Sub DataAvailable()
+		  self.LogFile.AddText me.ReadAll()
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Completed()
+		  self.UIEnable
 		End Sub
 	#tag EndEvent
 #tag EndEvents

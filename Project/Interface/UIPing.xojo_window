@@ -177,7 +177,7 @@ Begin DesktopContainer UIPing
       Arguments       =   ""
       Backend         =   ""
       Canonical       =   False
-      ExecuteMode     =   0
+      ExecuteMode     =   1
       ExitCode        =   0
       Index           =   -2147483648
       IsRunning       =   False
