@@ -147,10 +147,14 @@ Begin DesktopContainer UITraceRoute
    Begin Shell TraceRouteShell
       Arguments       =   ""
       Backend         =   ""
-      Canonical       =   False
+      Canonical       =   True
       ExecuteMode     =   1
+      ExitCode        =   0
       Index           =   -2147483648
+      IsRunning       =   False
       LockedInPosition=   False
+      PID             =   0
+      Result          =   ""
       Scope           =   2
       TabPanelIndex   =   0
       TimeOut         =   0
@@ -203,6 +207,7 @@ End
 	#tag Event
 		Sub DataAvailable()
 		  self.LogFile.AddText me.ReadAll()
+		  self.LogFile.VerticalScrollPosition = self.LogFile.VerticalScrollPosition + 25
 		End Sub
 	#tag EndEvent
 #tag EndEvents
