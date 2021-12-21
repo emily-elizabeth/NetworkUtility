@@ -127,7 +127,7 @@ Begin DesktopContainer UITraceRoute
       LockTop         =   True
       MaximumCharactersAllowed=   0
       Multiline       =   True
-      ReadOnly        =   False
+      ReadOnly        =   True
       Scope           =   2
       TabIndex        =   2
       TabPanelIndex   =   0
@@ -148,7 +148,7 @@ Begin DesktopContainer UITraceRoute
       Arguments       =   ""
       Backend         =   ""
       Canonical       =   True
-      ExecuteMode     =   1
+      ExecuteMode     =   2
       ExitCode        =   0
       Index           =   -2147483648
       IsRunning       =   False
@@ -158,6 +158,38 @@ Begin DesktopContainer UITraceRoute
       Scope           =   2
       TabPanelIndex   =   0
       TimeOut         =   0
+   End
+   Begin DesktopButton Stop
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Cancel          =   False
+      Caption         =   "Stop"
+      Default         =   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   384
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   False
+      LockRight       =   True
+      LockTop         =   True
+      MacButtonStyle  =   0
+      Scope           =   2
+      TabIndex        =   3
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   18
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   False
+      Width           =   96
    End
 End
 #tag EndDesktopWindow
@@ -169,6 +201,8 @@ End
 		  self.LogFile.Enabled = FALSE
 		  self.ServerAddress.Enabled = FALSE
 		  self.TraceRoute.Enabled = FALSE
+		  self.Stop.Visible = TRUE
+		  self.TraceRoute.Visible = FALSE
 		End Sub
 	#tag EndMethod
 
@@ -177,6 +211,8 @@ End
 		  self.LogFile.Enabled = TRUE
 		  self.ServerAddress.Enabled = TRUE
 		  self.TraceRoute.Enabled = TRUE
+		  self.Stop.Visible = FALSE
+		  self.TraceRoute.Visible = TRUE
 		End Sub
 	#tag EndMethod
 
@@ -188,7 +224,7 @@ End
 		Sub Pressed()
 		  if (not self.ServerAddress.Text.IsEmpty) then
 		    self.UIDisable
-		    self.TraceRouteShell.ExecuteMode = Shell.ExecuteModes.Asynchronous
+		    self.TraceRouteShell.ExecuteMode = Shell.ExecuteModes.Interactive
 		    self.TraceRouteShell.Execute "traceroute " + self.ServerAddress.Text
 		  end if
 		End Sub
@@ -199,15 +235,27 @@ End
 		Sub Completed()
 		  self.UIEnable
 		  
-		  if (me.ExitCode <> 0) then
+		  
+		  Select Case me.ExitCode
+		  Case 0 // normal termination, do nothing
+		  Case 130 // CTRL C stop
+		    self.LogFile.AddText EndOfLine + "User aborted."
+		  else
 		    self.LogFile.Text = "There was an error." + EndOfLine + me.ExitCode.ToString
-		  end if
+		  End Select
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Sub DataAvailable()
 		  self.LogFile.AddText me.ReadAll()
 		  self.LogFile.VerticalScrollPosition = self.LogFile.VerticalScrollPosition + 25
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Stop
+	#tag Event
+		Sub Pressed()
+		  self.TraceRouteShell.WriteLine ChrB(3)
 		End Sub
 	#tag EndEvent
 #tag EndEvents

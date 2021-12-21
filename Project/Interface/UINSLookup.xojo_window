@@ -127,7 +127,7 @@ Begin DesktopContainer UINSLookup
       LockTop         =   True
       MaximumCharactersAllowed=   0
       Multiline       =   True
-      ReadOnly        =   False
+      ReadOnly        =   True
       Scope           =   2
       TabIndex        =   2
       TabPanelIndex   =   0
@@ -149,8 +149,12 @@ Begin DesktopContainer UINSLookup
       Backend         =   ""
       Canonical       =   False
       ExecuteMode     =   1
+      ExitCode        =   0
       Index           =   -2147483648
+      IsRunning       =   False
       LockedInPosition=   False
+      PID             =   0
+      Result          =   ""
       Scope           =   2
       TabPanelIndex   =   0
       TimeOut         =   0
