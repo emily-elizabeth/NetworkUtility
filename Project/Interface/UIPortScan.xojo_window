@@ -43,7 +43,7 @@ Begin DesktopContainer UIPortScan
       LockRight       =   True
       LockTop         =   True
       Scope           =   2
-      TabIndex        =   0
+      TabIndex        =   4
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
@@ -76,7 +76,7 @@ Begin DesktopContainer UIPortScan
       LockTop         =   True
       MacButtonStyle  =   0
       Scope           =   2
-      TabIndex        =   1
+      TabIndex        =   3
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
@@ -118,7 +118,7 @@ Begin DesktopContainer UIPortScan
       Multiline       =   True
       ReadOnly        =   True
       Scope           =   2
-      TabIndex        =   4
+      TabIndex        =   5
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   ""
@@ -138,8 +138,12 @@ Begin DesktopContainer UIPortScan
       Backend         =   ""
       Canonical       =   False
       ExecuteMode     =   1
+      ExitCode        =   0
       Index           =   -2147483648
+      IsRunning       =   False
       LockedInPosition=   False
+      PID             =   0
+      Result          =   ""
       Scope           =   2
       TabPanelIndex   =   0
       TimeOut         =   0
@@ -212,7 +216,7 @@ Begin DesktopContainer UIPortScan
       Password        =   False
       ReadOnly        =   False
       Scope           =   2
-      TabIndex        =   3
+      TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   ""
@@ -253,7 +257,7 @@ Begin DesktopContainer UIPortScan
       Password        =   False
       ReadOnly        =   False
       Scope           =   2
-      TabIndex        =   5
+      TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   ""
