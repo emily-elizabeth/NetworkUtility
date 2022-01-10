@@ -197,9 +197,11 @@ End
 #tag WindowCode
 	#tag MenuHandler
 		Function FileQuit() As Boolean Handles FileQuit.Action
-			self.TryingToQuit = TRUE
+			if (self.TraceRouteShell.IsRunning) then
 			self.TraceRouteShell.WriteLine ChrB(3)
-			Return TRUE
+			App.IsQuitting = TRUE
+			end if
+			Return (App.IsQuitting)
 			
 		End Function
 	#tag EndMenuHandler
@@ -227,11 +229,6 @@ End
 	#tag EndMethod
 
 
-	#tag Property, Flags = &h21
-		Private TryingToQuit As Boolean
-	#tag EndProperty
-
-
 #tag EndWindowCode
 
 #tag Events TraceRoute
@@ -255,7 +252,7 @@ End
 		  Case 0 // normal termination, do nothing
 		  Case 130 // CTRL C stop
 		    self.LogFile.AddText EndOfLine + "User aborted."
-		    if (self.TryingToQuit) then
+		    if (App.IsQuitting) then
 		      Quit
 		    end if
 		  else
