@@ -136,7 +136,7 @@ Begin DesktopContainer UIPortScan
    Begin Shell PortScanShell
       Arguments       =   ""
       Backend         =   ""
-      Canonical       =   False
+      Canonical       =   True
       ExecuteMode     =   1
       ExitCode        =   0
       Index           =   -2147483648
@@ -275,11 +275,24 @@ End
 #tag EndDesktopWindow
 
 #tag WindowCode
+	#tag MenuHandler
+		Function FileQuit() As Boolean Handles FileQuit.Action
+			if (self.PortScanShell.IsRunning) then
+			App.IsQuitting = TRUE
+			self.PortScanShell.Close
+			end if
+			Return (App.IsQuitting)
+			
+		End Function
+	#tag EndMenuHandler
+
+
 	#tag Method, Flags = &h21
 		Private Sub UIDisable()
 		  self.EndPort.Enabled = FALSE
 		  self.LogFile.Enabled = FALSE
-		  self.Scan.Enabled = FALSE
+		  'self.Scan.Enabled = FALSE
+		  self.Scan.Caption = "Stop"
 		  self.ServerAddress.Enabled = FALSE
 		  self.StartPort.Enabled = FALSE
 		  self.Verbose.Enabled = FALSE
@@ -291,7 +304,8 @@ End
 		Private Sub UIEnable()
 		  self.EndPort.Enabled = TRUE
 		  self.LogFile.Enabled = TRUE
-		  self.Scan.Enabled = TRUE
+		  'self.Scan.Enabled = TRUE
+		  self.Scan.Caption = "Scan"
 		  self.ServerAddress.Enabled = TRUE
 		  self.StartPort.Enabled = TRUE
 		  self.Verbose.Enabled = TRUE
@@ -304,11 +318,16 @@ End
 #tag Events Scan
 	#tag Event
 		Sub Pressed()
-		  if (NOT self.ServerAddress.Text.IsEmpty) AND (NOT self.StartPort.Text.IsEmpty) then
-		    self.UIDisable
-		    self.PortScanShell.ExecuteMode = Shell.ExecuteModes.Asynchronous
-		    self.PortScanShell.Execute "nc", "-z" + if(self.Verbose.Value, "v ", " ") + _
-		    self.ServerAddress.Text + " " + self.StartPort.Text + if(self.EndPort.Text.IsEmpty, "", "-" + self.EndPort.Text)
+		  if (me.Caption = "Scan") then
+		    if (NOT self.ServerAddress.Text.IsEmpty) AND (NOT self.StartPort.Text.IsEmpty) then
+		      self.UIDisable
+		      self.PortScanShell.ExecuteMode = Shell.ExecuteModes.Asynchronous
+		      self.PortScanShell.Execute "nc", "-z" + if(self.Verbose.Value, "v ", " ") + _
+		      self.ServerAddress.Text + " " + self.StartPort.Text + if(self.EndPort.Text.IsEmpty, "", "-" + self.EndPort.Text)
+		    end if
+		    
+		  else
+		    self.PortScanShell.Close
 		  end if
 		End Sub
 	#tag EndEvent
@@ -323,9 +342,16 @@ End
 		Sub Completed()
 		  self.UIEnable
 		  
-		  if (me.ExitCode <> 0) then
+		  Select Case me.ExitCode
+		  Case 0 // normal termination, do nothing
+		  Case 137 // closed the shell
+		    self.LogFile.AddText EndOfLine + "User aborted."
+		    if (App.IsQuitting) then
+		      Quit
+		    end if
+		  else
 		    self.LogFile.Text = "There was an error." + EndOfLine + me.ExitCode.ToString
-		  end if
+		  End Select
 		End Sub
 	#tag EndEvent
 #tag EndEvents

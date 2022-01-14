@@ -65,7 +65,7 @@ Begin DesktopWindow Window1
          Composited      =   False
          Enabled         =   True
          HasBackgroundColor=   False
-         Height          =   332
+         Height          =   322
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Left            =   20
@@ -79,7 +79,7 @@ Begin DesktopWindow Window1
          TabPanelIndex   =   3
          TabStop         =   True
          Tooltip         =   ""
-         Top             =   48
+         Top             =   58
          Transparent     =   True
          Visible         =   True
          Width           =   560
