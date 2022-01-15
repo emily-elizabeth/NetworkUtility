@@ -1,5 +1,5 @@
 #tag DesktopWindow
-Begin DesktopContainer UIWhois
+Begin DesktopContainer UINetstat
    AllowAutoDeactivate=   True
    AllowFocus      =   False
    AllowFocusRing  =   False
@@ -25,22 +25,17 @@ Begin DesktopContainer UIWhois
    Transparent     =   True
    Visible         =   True
    Width           =   500
-   Begin DesktopTextField DomainName
+   Begin DesktopRadioGroup RadioGroup1
       AllowAutoDeactivate=   True
-      AllowFocusRing  =   True
-      AllowSpellChecking=   False
-      AllowTabs       =   False
-      BackgroundColor =   &cFFFFFF
       Bold            =   False
       Enabled         =   True
       FontName        =   "System"
       FontSize        =   0.0
       FontUnit        =   0
-      Format          =   ""
-      HasBorder       =   True
-      Height          =   22
-      Hint            =   "Domain name"
+      Height          =   91
+      Horizontal      =   False
       Index           =   -2147483648
+      InitialValue    =   "Display routing table information\nDisplay comprehensive network statistics for each protocol\nDisplay multicast information\nDisplay the state of all current socket connections"
       Italic          =   False
       Left            =   20
       LockBottom      =   False
@@ -48,29 +43,23 @@ Begin DesktopContainer UIWhois
       LockLeft        =   True
       LockRight       =   True
       LockTop         =   True
-      MaximumCharactersAllowed=   0
-      Password        =   False
-      ReadOnly        =   False
       Scope           =   2
+      SelectedIndex   =   0
       TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
-      Text            =   ""
-      TextAlignment   =   2
-      TextColor       =   &c000000
       Tooltip         =   ""
       Top             =   20
       Transparent     =   False
       Underline       =   False
-      ValidationMask  =   ""
       Visible         =   True
-      Width           =   368
+      Width           =   460
    End
-   Begin DesktopButton Lookup
+   Begin DesktopButton Netstat
       AllowAutoDeactivate=   True
       Bold            =   False
       Cancel          =   False
-      Caption         =   "Lookup"
+      Caption         =   "Netstat"
       Default         =   False
       Enabled         =   True
       FontName        =   "System"
@@ -78,6 +67,7 @@ Begin DesktopContainer UIWhois
       FontUnit        =   0
       Height          =   20
       Index           =   -2147483648
+      InitialParent   =   ""
       Italic          =   False
       Left            =   400
       LockBottom      =   False
@@ -91,7 +81,7 @@ Begin DesktopContainer UIWhois
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   20
+      Top             =   123
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -101,7 +91,7 @@ Begin DesktopContainer UIWhois
       AllowAutoDeactivate=   True
       AllowFocusRing  =   True
       AllowSpellChecking=   True
-      AllowStyledText =   True
+      AllowStyledText =   False
       AllowTabs       =   False
       BackgroundColor =   &cFFFFFF
       Bold            =   False
@@ -111,9 +101,9 @@ Begin DesktopContainer UIWhois
       FontUnit        =   0
       Format          =   ""
       HasBorder       =   True
-      HasHorizontalScrollbar=   False
+      HasHorizontalScrollbar=   True
       HasVerticalScrollbar=   True
-      Height          =   226
+      Height          =   125
       HideSelection   =   True
       Index           =   -2147483648
       Italic          =   False
@@ -136,7 +126,7 @@ Begin DesktopContainer UIWhois
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   54
+      Top             =   155
       Transparent     =   False
       Underline       =   False
       UnicodeMode     =   1
@@ -144,11 +134,11 @@ Begin DesktopContainer UIWhois
       Visible         =   True
       Width           =   460
    End
-   Begin Shell WhoisShell
+   Begin Shell NetstatShell
       Arguments       =   ""
       Backend         =   ""
-      Canonical       =   False
-      ExecuteMode     =   1
+      Canonical       =   True
+      ExecuteMode     =   2
       ExitCode        =   0
       Index           =   -2147483648
       IsRunning       =   False
@@ -165,48 +155,67 @@ End
 #tag WindowCode
 	#tag Method, Flags = &h21
 		Private Sub UIDisable()
-		  self.DomainName.Enabled = FALSE
-		  self.LogFile.Enabled = FALSE
-		  self.Lookup.Enabled = FALSE
 		  self.LogFile.Text = ""
+		  'self.Netstat.Enabled = FALSE
+		  self.Netstat.Caption = "Stop"
+		  self.RadioGroup1.Enabled = FALSE
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
 		Private Sub UIEnable()
-		  self.DomainName.Enabled = TRUE
-		  self.LogFile.Enabled = TRUE
-		  self.Lookup.Enabled = TRUE
+		  'self.Netstat.Enabled = TRUE
+		  self.Netstat.Caption = "Netstat"
+		  self.RadioGroup1.Enabled = TRUE
 		End Sub
 	#tag EndMethod
 
 
 #tag EndWindowCode
 
-#tag Events Lookup
+#tag Events Netstat
 	#tag Event
 		Sub Pressed()
-		  if (not self.DomainName.Text.IsEmpty) then
+		  if (me.Caption = "Netstat") then
 		    self.UIDisable
-		    self.WhoisShell.ExecuteMode = Shell.ExecuteModes.Asynchronous
-		    self.WhoisShell.Execute "whois " + self.DomainName.Text
+		    select case self.RadioGroup1.SelectedIndex
+		    case 0
+		      self.NetstatShell.Execute "netstat -r"
+		    case 1
+		      self.NetstatShell.Execute "netstat -s"
+		    case 2
+		      self.NetstatShell.Execute "netstat -g"
+		    case 3
+		      self.NetstatShell.Execute "netstat"
+		    end select
+		  else
+		    self.NetstatShell.WriteLine ChrB(3)
 		  end if
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events WhoisShell
+#tag Events NetstatShell
 	#tag Event
 		Sub Completed()
 		  self.UIEnable
 		  
-		  if (me.ExitCode <> 0) then
+		  
+		  Select Case me.ExitCode
+		  Case 0 // normal termination, do nothing
+		  Case 130 // CTRL C stop
+		    self.LogFile.AddText EndOfLine + "User aborted."
+		    if (App.IsQuitting) then
+		      Quit
+		    end if
+		  else
 		    self.LogFile.Text = "There was an error." + EndOfLine + me.ExitCode.ToString
-		  end if
+		  End Select
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Sub DataAvailable()
-		  self.LogFile.AddText me.ReadAll
+		  self.LogFile.AddText me.ReadAll()
+		  self.LogFile.VerticalScrollPosition = self.LogFile.VerticalScrollPosition + 25
 		End Sub
 	#tag EndEvent
 #tag EndEvents

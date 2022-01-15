@@ -44,7 +44,7 @@ Begin DesktopWindow Window1
       Panels          =   ""
       Scope           =   2
       SmallTabs       =   False
-      TabDefinition   =   "NSLookup\rPing\rPort Scan\rTrace Route\rWhois"
+      TabDefinition   =   "Netstat\rNSLookup\rPing\rPort Scan\rTrace Route\rWhois"
       TabIndex        =   6
       TabPanelIndex   =   0
       TabStop         =   True
@@ -52,7 +52,7 @@ Begin DesktopWindow Window1
       Top             =   20
       Transparent     =   False
       Underline       =   False
-      Value           =   3
+      Value           =   0
       Visible         =   True
       Width           =   560
       Begin UIPortScan UIPortScan1
@@ -76,7 +76,7 @@ Begin DesktopWindow Window1
          LockTop         =   True
          Scope           =   2
          TabIndex        =   0
-         TabPanelIndex   =   3
+         TabPanelIndex   =   4
          TabStop         =   True
          Tooltip         =   ""
          Top             =   58
@@ -105,7 +105,7 @@ Begin DesktopWindow Window1
          LockTop         =   True
          Scope           =   2
          TabIndex        =   0
-         TabPanelIndex   =   5
+         TabPanelIndex   =   6
          TabStop         =   True
          Tooltip         =   ""
          Top             =   58
@@ -134,7 +134,7 @@ Begin DesktopWindow Window1
          LockTop         =   True
          Scope           =   2
          TabIndex        =   0
-         TabPanelIndex   =   2
+         TabPanelIndex   =   3
          TabStop         =   True
          Tooltip         =   ""
          Top             =   58
@@ -163,7 +163,7 @@ Begin DesktopWindow Window1
          LockTop         =   True
          Scope           =   2
          TabIndex        =   0
-         TabPanelIndex   =   1
+         TabPanelIndex   =   2
          TabStop         =   True
          Tooltip         =   ""
          Top             =   58
@@ -192,7 +192,36 @@ Begin DesktopWindow Window1
          LockTop         =   True
          Scope           =   2
          TabIndex        =   0
-         TabPanelIndex   =   4
+         TabPanelIndex   =   5
+         TabStop         =   True
+         Tooltip         =   ""
+         Top             =   58
+         Transparent     =   True
+         Visible         =   True
+         Width           =   560
+      End
+      Begin UINetstat UINetstat1
+         AllowAutoDeactivate=   True
+         AllowFocus      =   False
+         AllowFocusRing  =   False
+         AllowTabs       =   True
+         Backdrop        =   0
+         BackgroundColor =   &cFFFFFF
+         Composited      =   False
+         Enabled         =   True
+         HasBackgroundColor=   False
+         Height          =   322
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Left            =   20
+         LockBottom      =   True
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   True
+         LockTop         =   True
+         Scope           =   2
+         TabIndex        =   0
+         TabPanelIndex   =   1
          TabStop         =   True
          Tooltip         =   ""
          Top             =   58

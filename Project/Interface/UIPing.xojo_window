@@ -39,7 +39,7 @@ Begin DesktopContainer UIPing
       Format          =   ""
       HasBorder       =   True
       Height          =   22
-      Hint            =   ""
+      Hint            =   "Domain name or IP Address"
       Index           =   -2147483648
       Italic          =   False
       Left            =   20
@@ -135,7 +135,7 @@ Begin DesktopContainer UIPing
       BackgroundColor =   &cFFFFFF
       Bold            =   False
       Enabled         =   True
-      FontName        =   "System"
+      FontName        =   "Courier New"
       FontSize        =   0.0
       FontUnit        =   0
       Format          =   ""

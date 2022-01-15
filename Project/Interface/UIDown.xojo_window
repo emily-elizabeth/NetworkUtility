@@ -1,5 +1,5 @@
 #tag DesktopWindow
-Begin DesktopContainer UIWhois
+Begin DesktopContainer UIDown
    AllowAutoDeactivate=   True
    AllowFocus      =   False
    AllowFocusRing  =   False
@@ -25,7 +25,7 @@ Begin DesktopContainer UIWhois
    Transparent     =   True
    Visible         =   True
    Width           =   500
-   Begin DesktopTextField DomainName
+   Begin DesktopTextField Address
       AllowAutoDeactivate=   True
       AllowFocusRing  =   True
       AllowSpellChecking=   False
@@ -39,7 +39,7 @@ Begin DesktopContainer UIWhois
       Format          =   ""
       HasBorder       =   True
       Height          =   22
-      Hint            =   "Domain name"
+      Hint            =   "Domain name or IP Address"
       Index           =   -2147483648
       Italic          =   False
       Left            =   20
@@ -64,13 +64,13 @@ Begin DesktopContainer UIWhois
       Underline       =   False
       ValidationMask  =   ""
       Visible         =   True
-      Width           =   368
+      Width           =   325
    End
-   Begin DesktopButton Lookup
+   Begin DesktopButton IsItDown
       AllowAutoDeactivate=   True
       Bold            =   False
       Cancel          =   False
-      Caption         =   "Lookup"
+      Caption         =   "Is It Down?"
       Default         =   False
       Enabled         =   True
       FontName        =   "System"
@@ -79,7 +79,7 @@ Begin DesktopContainer UIWhois
       Height          =   20
       Index           =   -2147483648
       Italic          =   False
-      Left            =   400
+      Left            =   357
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   False
@@ -95,9 +95,9 @@ Begin DesktopContainer UIWhois
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   80
+      Width           =   123
    End
-   Begin DesktopTextArea LogFile
+   Begin DesktopTextArea LogText
       AllowAutoDeactivate=   True
       AllowFocusRing  =   True
       AllowSpellChecking=   True
@@ -106,7 +106,7 @@ Begin DesktopContainer UIWhois
       BackgroundColor =   &cFFFFFF
       Bold            =   False
       Enabled         =   True
-      FontName        =   "Courier New"
+      FontName        =   "System"
       FontSize        =   0.0
       FontUnit        =   0
       Format          =   ""
@@ -127,7 +127,7 @@ Begin DesktopContainer UIWhois
       LockTop         =   True
       MaximumCharactersAllowed=   0
       Multiline       =   True
-      ReadOnly        =   True
+      ReadOnly        =   False
       Scope           =   2
       TabIndex        =   2
       TabPanelIndex   =   0
@@ -144,20 +144,11 @@ Begin DesktopContainer UIWhois
       Visible         =   True
       Width           =   460
    End
-   Begin Shell WhoisShell
-      Arguments       =   ""
-      Backend         =   ""
-      Canonical       =   False
-      ExecuteMode     =   1
-      ExitCode        =   0
+   Begin URLConnection IsDownConnection
       Index           =   -2147483648
-      IsRunning       =   False
       LockedInPosition=   False
-      PID             =   0
-      Result          =   ""
       Scope           =   2
       TabPanelIndex   =   0
-      TimeOut         =   0
    End
 End
 #tag EndDesktopWindow
@@ -165,48 +156,43 @@ End
 #tag WindowCode
 	#tag Method, Flags = &h21
 		Private Sub UIDisable()
-		  self.DomainName.Enabled = FALSE
-		  self.LogFile.Enabled = FALSE
-		  self.Lookup.Enabled = FALSE
-		  self.LogFile.Text = ""
+		  self.Address.Enabled = FALSE
+		  self.IsItDown.Enabled = FALSE
+		  self.LogText.Enabled = FALSE
+		  self.LogText.Text = ""
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
 		Private Sub UIEnable()
-		  self.DomainName.Enabled = TRUE
-		  self.LogFile.Enabled = TRUE
-		  self.Lookup.Enabled = TRUE
+		  self.Address.Enabled = TRUE
+		  self.IsItDown.Enabled = TRUE
+		  self.LogText.Enabled = TRUE
 		End Sub
 	#tag EndMethod
 
 
 #tag EndWindowCode
 
-#tag Events Lookup
+#tag Events IsItDown
 	#tag Event
 		Sub Pressed()
-		  if (not self.DomainName.Text.IsEmpty) then
-		    self.UIDisable
-		    self.WhoisShell.ExecuteMode = Shell.ExecuteModes.Asynchronous
-		    self.WhoisShell.Execute "whois " + self.DomainName.Text
-		  end if
+		  
+		  Try
+		    if (NOT self.Address.Text.IsEmpty) then
+		      self.UIDisable
+		      self.IsDownConnection.Send("GET","https://api.downforeveryoneorjustme.com/" + self.Address.Text)
+		    end if
+		  Catch t As UnsupportedOperationException
+		    Return
+		  End Try
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events WhoisShell
+#tag Events IsDownConnection
 	#tag Event
-		Sub Completed()
-		  self.UIEnable
-		  
-		  if (me.ExitCode <> 0) then
-		    self.LogFile.Text = "There was an error." + EndOfLine + me.ExitCode.ToString
-		  end if
-		End Sub
-	#tag EndEvent
-	#tag Event
-		Sub DataAvailable()
-		  self.LogFile.AddText me.ReadAll
+		Sub ContentReceived(URL As String, HTTPStatus As Integer, content As String)
+		  self.LogText.Text = content
 		End Sub
 	#tag EndEvent
 #tag EndEvents

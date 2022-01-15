@@ -106,7 +106,7 @@ Begin DesktopContainer UITraceRoute
       BackgroundColor =   &cFFFFFF
       Bold            =   False
       Enabled         =   True
-      FontName        =   "System"
+      FontName        =   "Courier New"
       FontSize        =   0.0
       FontUnit        =   0
       Format          =   ""
