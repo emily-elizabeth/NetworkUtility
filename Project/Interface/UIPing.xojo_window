@@ -192,9 +192,22 @@ End
 #tag EndDesktopWindow
 
 #tag WindowCode
+	#tag MenuHandler
+		Function FileQuit() As Boolean Handles FileQuit.Action
+			if (self.PingShell.IsRunning) then
+			App.IsQuitting = TRUE
+			self.PingShell.Close
+			end if
+			Return (App.IsQuitting)
+			
+		End Function
+	#tag EndMenuHandler
+
+
 	#tag Method, Flags = &h21
 		Private Sub UIDisable()
-		  self.Button1.Enabled = FALSE
+		  'self.Button1.Enabled = FALSE
+		  self.Button1.Caption = "Stop"
 		  self.Counter.Enabled = FALSE
 		  self.ServerAddress.Enabled = FALSE
 		  self.LogFile.Text = ""
@@ -203,7 +216,8 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub UIEnable()
-		  self.Button1.Enabled = TRUE
+		  'self.Button1.Enabled = TRUE
+		  self.Button1.Caption = "Ping"
 		  self.Counter.Enabled = TRUE
 		  self.ServerAddress.Enabled = TRUE
 		End Sub
@@ -215,10 +229,14 @@ End
 #tag Events Button1
 	#tag Event
 		Sub Pressed()
-		  if (not self.ServerAddress.Text.IsEmpty) then
-		    self.UIDisable
-		    self.PingShell.ExecuteMode = Shell.ExecuteModes.Asynchronous
-		    self.PingShell.Execute "ping " + self.ServerAddress.Text + " -c " + self.Counter.SelectedRowValue
+		  if (me.Caption = "Ping") then
+		    if (not self.ServerAddress.Text.IsEmpty) then
+		      self.UIDisable
+		      self.PingShell.ExecuteMode = Shell.ExecuteModes.Asynchronous
+		      self.PingShell.Execute "ping " + self.ServerAddress.Text + " -c " + self.Counter.SelectedRowValue
+		    end if
+		  else
+		    self.PingShell.Close
 		  end if
 		End Sub
 	#tag EndEvent
@@ -233,9 +251,16 @@ End
 		Sub Completed()
 		  self.UIEnable
 		  
-		  if (me.ExitCode <> 0) then
+		  Select Case me.ExitCode
+		  Case 0 // normal termination, do nothing
+		  Case 137 // closed the shell
+		    self.LogFile.AddText EndOfLine + "User aborted."
+		    if (App.IsQuitting) then
+		      Quit
+		    end if
+		  else
 		    self.LogFile.Text = "There was an error." + EndOfLine + me.ExitCode.ToString
-		  end if
+		  End Select
 		End Sub
 	#tag EndEvent
 #tag EndEvents
