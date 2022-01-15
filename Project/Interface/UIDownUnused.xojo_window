@@ -1,5 +1,5 @@
 #tag DesktopWindow
-Begin DesktopContainer UIDown
+Begin DesktopContainer UIDownUnused
    AllowAutoDeactivate=   True
    AllowFocus      =   False
    AllowFocusRing  =   False
@@ -145,6 +145,8 @@ Begin DesktopContainer UIDown
       Width           =   460
    End
    Begin URLConnection IsDownConnection
+      AllowCertificateValidation=   False
+      HTTPStatusCode  =   0
       Index           =   -2147483648
       LockedInPosition=   False
       Scope           =   2

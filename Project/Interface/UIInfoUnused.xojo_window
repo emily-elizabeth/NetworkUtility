@@ -1,5 +1,5 @@
 #tag DesktopWindow
-Begin DesktopContainer UIInfo
+Begin DesktopContainer UIInfoUnused
    AllowAutoDeactivate=   True
    AllowFocus      =   False
    AllowFocusRing  =   False
@@ -25,6 +25,35 @@ Begin DesktopContainer UIInfo
    Transparent     =   True
    Visible         =   True
    Width           =   500
+   Begin DesktopPopupMenu PopupMenu1
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      InitialValue    =   ""
+      Italic          =   False
+      Left            =   178
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   True
+      LockTop         =   True
+      Scope           =   2
+      SelectedRowIndex=   0
+      TabIndex        =   0
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   20
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   302
+   End
    Begin DesktopLabel Label1
       AllowAutoDeactivate=   True
       Bold            =   False
@@ -44,10 +73,10 @@ Begin DesktopContainer UIInfo
       Multiline       =   False
       Scope           =   2
       Selectable      =   False
-      TabIndex        =   0
+      TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
-      Text            =   "Public IP Address:"
+      Text            =   "Interface:"
       TextAlignment   =   3
       TextColor       =   &c000000
       Tooltip         =   ""
@@ -55,54 +84,7 @@ Begin DesktopContainer UIInfo
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   234
-   End
-   Begin DesktopTextField PublicIP
-      AllowAutoDeactivate=   True
-      AllowFocusRing  =   True
-      AllowSpellChecking=   False
-      AllowTabs       =   False
-      BackgroundColor =   &cFFFFFF
-      Bold            =   False
-      Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
-      FontUnit        =   0
-      Format          =   ""
-      HasBorder       =   True
-      Height          =   22
-      Hint            =   ""
-      Index           =   -2147483648
-      Italic          =   False
-      Left            =   266
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      MaximumCharactersAllowed=   0
-      Password        =   False
-      ReadOnly        =   True
-      Scope           =   2
-      TabIndex        =   1
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Text            =   ""
-      TextAlignment   =   0
-      TextColor       =   &c000000
-      Tooltip         =   ""
-      Top             =   18
-      Transparent     =   False
-      Underline       =   False
-      ValidationMask  =   ""
-      Visible         =   True
-      Width           =   214
-   End
-   Begin URLConnection PublicIPSocket
-      Index           =   -2147483648
-      LockedInPosition=   False
-      Scope           =   2
-      TabPanelIndex   =   0
+      Width           =   146
    End
 End
 #tag EndDesktopWindow
@@ -110,18 +92,32 @@ End
 #tag WindowCode
 #tag EndWindowCode
 
-#tag Events PublicIP
+#tag Events PopupMenu1
 	#tag Event
 		Sub Opening()
-		  self.PublicIPSocket.Send "GET", "https://api.kwelo.com/v1/network/ip-address/my"
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events PublicIPSocket
-	#tag Event
-		Sub ContentReceived(URL As String, HTTPStatus As Integer, content As String)
-		  if (HTTPStatus = 200) then
-		    self.PublicIP.Text = content
+		  DIM aShell As NEW Shell
+		  aShell.Execute "networksetup -listallhardwareports"
+		  
+		  DIM shellResults As String = aShell.Result
+		  
+		  
+		  DIM aRegEx As NEW RegEx
+		  DIM aMatch As RegExMatch
+		  
+		  aRegEx.SearchPattern = "Hardware Port: ([\w\s\(\)\-]+$)"
+		  aMatch = aRegEx.Search(shellResults)
+		  
+		  DIM result As String
+		  do
+		    if (aMatch <> Nil) then
+		      result = aMatch.SubExpressionString(1)
+		      me.AddRow result
+		    end if
+		    aMatch = aRegEx.Search
+		  loop until aMatch is Nil
+		  
+		  if (me.RowCount > 0) then
+		    me.SelectedRowIndex = 0
 		  end if
 		End Sub
 	#tag EndEvent
