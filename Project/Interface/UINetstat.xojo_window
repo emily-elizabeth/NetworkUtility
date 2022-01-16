@@ -153,6 +153,18 @@ End
 #tag EndDesktopWindow
 
 #tag WindowCode
+	#tag MenuHandler
+		Function FileQuit() As Boolean Handles FileQuit.Action
+			if (self.NetstatShell.IsRunning) then
+			self.NetstatShell.WriteLine ChrB(3)
+			App.IsQuitting = TRUE
+			end if
+			Return (App.IsQuitting)
+			
+		End Function
+	#tag EndMenuHandler
+
+
 	#tag Method, Flags = &h21
 		Private Sub UIDisable()
 		  self.LogFile.Text = ""
