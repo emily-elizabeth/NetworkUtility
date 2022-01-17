@@ -17,8 +17,8 @@ Begin DesktopWindow Window1
    MaximumWidth    =   32000
    MenuBar         =   684488703
    MenuBarVisible  =   False
-   MinimumHeight   =   64
-   MinimumWidth    =   64
+   MinimumHeight   =   400
+   MinimumWidth    =   600
    Resizeable      =   True
    Title           =   "Network Utility"
    Type            =   0
