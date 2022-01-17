@@ -1,6 +1,13 @@
 #tag Class
 Protected Class App
 Inherits DesktopApplication
+	#tag Event
+		Sub Opening()
+		  App.AllowAutoQuit = TRUE
+		End Sub
+	#tag EndEvent
+
+
 	#tag Property, Flags = &h0
 		IsQuitting As Boolean
 	#tag EndProperty
@@ -164,6 +171,14 @@ Inherits DesktopApplication
 			Group="Behavior"
 			InitialValue=""
 			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="IsQuitting"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
 			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior

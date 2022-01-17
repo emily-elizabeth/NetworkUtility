@@ -7,7 +7,7 @@ Begin DesktopWindow Window1
    FullScreen      =   False
    HasBackgroundColor=   False
    HasCloseButton  =   True
-   HasFullScreenButton=   False
+   HasFullScreenButton=   True
    HasMaximizeButton=   True
    HasMinimizeButton=   True
    Height          =   400

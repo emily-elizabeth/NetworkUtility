@@ -105,13 +105,5 @@ Begin Menu MainMenuBar
          Visible = True
       End
    End
-   Begin DesktopMenuItem HelpMenu
-      SpecialMenu = 0
-      Index = -2147483648
-      Text = "&Help"
-      AutoEnabled = True
-      AutoEnable = True
-      Visible = True
-   End
 End
 #tag EndMenu
