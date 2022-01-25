@@ -235,9 +235,9 @@ End
 	#tag Event
 		Sub Pressed()
 		  if (not self.ServerAddress.Text.IsEmpty) then
-		    self.UIDisable
 		    self.TraceRouteShell.ExecuteMode = Shell.ExecuteModes.Interactive
 		    self.TraceRouteShell.Execute "traceroute " + self.ServerAddress.Text
+		    self.UIDisable
 		  end if
 		End Sub
 	#tag EndEvent

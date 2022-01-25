@@ -187,9 +187,9 @@ End
 	#tag Event
 		Sub Pressed()
 		  if (not self.DomainName.Text.IsEmpty) then
-		    self.UIDisable
 		    self.WhoisShell.ExecuteMode = Shell.ExecuteModes.Asynchronous
 		    self.WhoisShell.Execute "whois " + self.DomainName.Text
+		    self.UIDisable
 		  end if
 		End Sub
 	#tag EndEvent

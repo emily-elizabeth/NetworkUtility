@@ -187,9 +187,9 @@ End
 	#tag Event
 		Sub Pressed()
 		  if (not self.ServerAddress.Text.IsEmpty) then
-		    self.UIDisable
 		    self.NSLookupShell.ExecuteMode = Shell.ExecuteModes.Asynchronous
 		    self.NSLookupShell.Execute "nslookup " + self.ServerAddress.Text
+		    self.UIDisable
 		  end if
 		End Sub
 	#tag EndEvent

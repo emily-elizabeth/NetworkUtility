@@ -231,9 +231,9 @@ End
 		Sub Pressed()
 		  if (me.Caption = "Ping") then
 		    if (not self.ServerAddress.Text.IsEmpty) then
-		      self.UIDisable
 		      self.PingShell.ExecuteMode = Shell.ExecuteModes.Asynchronous
 		      self.PingShell.Execute "ping " + self.ServerAddress.Text + " -c " + self.Counter.SelectedRowValue
+		      self.UIDisable
 		    end if
 		  else
 		    self.PingShell.Close

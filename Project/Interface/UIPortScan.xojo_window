@@ -320,10 +320,10 @@ End
 		Sub Pressed()
 		  if (me.Caption = "Scan") then
 		    if (NOT self.ServerAddress.Text.IsEmpty) AND (NOT self.StartPort.Text.IsEmpty) then
-		      self.UIDisable
 		      self.PortScanShell.ExecuteMode = Shell.ExecuteModes.Asynchronous
 		      self.PortScanShell.Execute "nc", "-z" + if(self.Verbose.Value, "v ", " ") + _
 		      self.ServerAddress.Text + " " + self.StartPort.Text + if(self.EndPort.Text.IsEmpty, "", "-" + self.EndPort.Text)
+		      self.UIDisable
 		    end if
 		    
 		  else

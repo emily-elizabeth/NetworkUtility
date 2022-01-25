@@ -189,7 +189,6 @@ End
 	#tag Event
 		Sub Pressed()
 		  if (me.Caption = "Netstat") then
-		    self.UIDisable
 		    select case self.RadioGroup1.SelectedIndex
 		    case 0
 		      self.NetstatShell.Execute "netstat -r"
@@ -200,6 +199,7 @@ End
 		    case 3
 		      self.NetstatShell.Execute "netstat"
 		    end select
+		    self.UIDisable
 		  else
 		    self.NetstatShell.WriteLine ChrB(3)
 		  end if
