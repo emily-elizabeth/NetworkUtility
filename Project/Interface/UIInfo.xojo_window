@@ -99,6 +99,8 @@ Begin DesktopContainer UIInfo
       Width           =   214
    End
    Begin URLConnection PublicIPSocket
+      AllowCertificateValidation=   False
+      HTTPStatusCode  =   0
       Index           =   -2147483648
       LockedInPosition=   False
       Scope           =   2
@@ -113,7 +115,7 @@ End
 #tag Events PublicIP
 	#tag Event
 		Sub Opening()
-		  self.PublicIPSocket.Send "GET", "https://api.kwelo.com/v1/network/ip-address/my"
+		  self.PublicIPSocket.Send "GET", "https://api.ipify.org"
 		End Sub
 	#tag EndEvent
 #tag EndEvents
