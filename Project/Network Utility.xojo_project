@@ -1,5 +1,5 @@
 Type=Desktop
-RBProjectVersion=2021.031
+RBProjectVersion=2022.032
 MinIDEVersion=20210300
 OrigIDEVersion=20210301
 Folder=Demo App;Demo App;&h00000000050447FF;&h0000000000000000;false
@@ -51,6 +51,7 @@ UseBuildsFolder=True
 HiDPI=True
 DarkMode=True
 CopyRedistNextToWindowsEXE=False
+IncludePDB=False
 IsWebProject=False
 LinuxBuildArchitecture=1
 MacBuildArchitecture=4
