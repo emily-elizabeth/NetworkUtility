@@ -219,7 +219,7 @@ Begin DesktopContainer UIPortScan
       TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
-      Text            =   ""
+      Text            =   "443"
       TextAlignment   =   2
       TextColor       =   &c000000
       Tooltip         =   ""
@@ -271,18 +271,51 @@ Begin DesktopContainer UIPortScan
       Visible         =   True
       Width           =   184
    End
+   Begin DesktopLabel Label1
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   True
+      LockTop         =   True
+      Multiline       =   False
+      Scope           =   2
+      Selectable      =   False
+      TabIndex        =   6
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   "This can take a long time"
+      TextAlignment   =   0
+      TextColor       =   &c000000
+      Tooltip         =   ""
+      Top             =   52
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   368
+   End
 End
 #tag EndDesktopWindow
 
 #tag WindowCode
 	#tag MenuHandler
 		Function FileQuit() As Boolean Handles FileQuit.Action
-			if (self.PortScanShell.IsRunning) then
-			App.IsQuitting = TRUE
-			self.PortScanShell.Close
-			end if
-			Return (App.IsQuitting)
-			
+		  if (self.PortScanShell.IsRunning) then
+		    App.IsQuitting = TRUE
+		    self.PortScanShell.Close
+		  end if
+		  Return (App.IsQuitting)
+		  
 		End Function
 	#tag EndMenuHandler
 
